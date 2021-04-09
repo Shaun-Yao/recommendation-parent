@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>recommendation</title>
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">推荐进度</h3>
+    </div>
+    <div class="panel-body">
+            <input type="hidden" name="id" id="id" th:value="${recommendation.id}"/>
+            <div class="form-group">
+                <span th:text="${recommendation.name}"></span>
+                <span th:text="${recommendation.mobile}"></span>
+            </div>
+
+            <div class="form-group">
+                <span th:text="${recommendation.mode.getDesc()}"></span>
+                <span th:text="${recommendation.area}"></span>
+            </div>
+            <div class="form-group">
+                <ul class="list-group" th:each="note, state : ${notes}">
+                    <li class="list-group-item"
+                        th:text="${#temporals.format(note.createdTime, 'M-d HH:mm') + ' ' +  note.content}">content</li>
+                </ul>
+            </div>
+    </div>
+</div>
+</body>
+<script>
+    function goBack() {
+        $(".panel-body").modal('show');
+        window.location.href='/recommendation/list-all';
+    }
+
+    $(function(){
+        $('#submitBtn').click(function() {
+            $('#submitBtn').attr('disable', true);
+            if($('#form')[0].reportValidity()) {
+                $.ajax({
+                    type: "GET",
+                    url: "/recommendation/is-mobile-exist",
+                    data: {
+                        "mobile": $("#mobile").val()
+                    },
+                    async: false,
+                    //dataType: "json",
+                    success: function(result){
+                        if (result) {
+                            alert('手机号已被推荐！');
+                            $('#submitBtn').attr('disable', false);
+                            return;
+                        } else {
+                            $('#form').submit();
+                        }
+                    }
+                });
+            }
+        })
+    });
+</script>
+</html>

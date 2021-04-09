@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>recommendations</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-table/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css">
+    <link rel="stylesheet" href="/webjars/Eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-select/1.13.17/css/bootstrap-select.min.css" />
+</head>
+<body>
+
+<div class="col-md-12 pull-left" id="tb1">
+    <form class="form-inline" id="resource-form">
+
+        <div class="form-group">
+            <label class="form-lable">手机号码：</label>
+            <div class='input-group date' id='month-date'>
+                <input type='number' class="form-control" name="mobile" id='mobile' maxlength="11" required />
+
+            </div>
+        </div>
+
+        <a class="btn btn-info  glyphicon glyphicon-search form-search" id="searchBtn" >搜索</a>
+<!--        <a class="btn btn-danger" id="remove" >删除</a>-->
+    </form>
+</div>
+
+
+    <table id="table" class="modal-body"></table>
+
+    <div id="toolbar" >
+        <!--<button type="button" class="btn btn-success" id="add">新增</button>-->
+        <!--<button type="button" class="btn btn-danger" id="remove">删除</button>-->
+    </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">填写进度</h4>
+            </div>
+            <form class="form-horizontal" id="form" role="form" method="post">
+                <div class="modal-body">
+
+                    <ul class="list-group" id="recommends">
+
+                    </ul>
+
+                    <input type="hidden" id="recommendId" name="recommendId" >
+                    <div class="form-group">
+                        <label for="content" class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10">
+                            <input type="text" maxlength="50" class="form-control" id="content" name="content" required >
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" id="save" class="btn btn-primary">新增</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/webjars/jquery-form/4.2.2/jquery.form.min.js"></script>
+<script src="/webjars/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="/webjars/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="/webjars/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+<script src="/webjars/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js"></script>
+<script src="/webjars/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="/webjars/momentjs/2.24.0/min/moment-with-locales.min.js"></script>
+<script src="/webjars/Eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/webjars/bootbox.js/5.1.3/dist/bootbox.min.js"></script>
+<script src="/webjars/bootstrap-select/1.13.17/js/bootstrap-select.min.js"></script>
+<script src="/webjars/bootstrap-select/1.13.17/js/i18n/defaults-zh_CN.min.js"></script>
+</body>
+<script th:inline="javascript">
+
+    $(function () {
+
+        $('#searchBtn').click(function () {
+            console.log($('#resource-form').serialize());
+            // $('#table').bootstrapTable('refresh');
+            $('#table').bootstrapTable('refresh',
+                {ajaxOption:{
+                        data: $('#resource-form').serialize()
+                    }
+                });
+        });
+
+
+        $('#remove').click(function() {
+            if($('#resource-form')[0].reportValidity()) {
+                bootbox.confirm("确认删除？",
+                    function(result){
+                        if(result) {
+                            $.ajax({
+                                type: "post",
+                                url: "/bill/remove",
+                                data: $('#resource-form').serialize(),
+                                success: function(data){
+                                    alert("删除成功！");
+                                    //$('#table').bootstrapTable('refresh');
+                                },
+                                error:function(xhr,state,errorThrown){
+                                    alert("操作失败，请重新尝试！");
+                                }
+                            });
+                    }});
+            }
+        });
+
+        $('#save').click(function() {
+            if($('#form')[0].reportValidity()) {
+                $.ajax({
+                    type: "post",
+                    url: "/recommendation/add-note",
+                    data: $('#form').serialize(),
+                    success: function(data){
+                        $('#myModal').modal('hide');
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error:function(xhr,state,errorThrown){
+                        alert("操作失败，请稍后重新尝试！");
+                    }
+                });
+            }
+        });
+
+    });
+
+
+    $('#table').bootstrapTable({
+        url: '/recommendation/list',
+        pagination: true,
+        sidePagination: "server",
+        locale: 'zh-CN',
+        ajaxOptions:{
+            // data: $('#resource-form').serialize() //无效
+            traditional:true
+        },
+        toolbar: "#toolbar",
+        clickToSelect: true,
+        singleSelect: true,
+        sortable: true,
+        smartDisplay: false,
+        pageNumber: 1,     //初始化加载第一页，默认第一页
+        pageSize: 10,      //每页的记录行数（*）
+        queryParams: function (params) {
+            //导出全部数据没有传limit给后台, 把limit设置为全部数据
+            if (typeof(params.limit) == "undefined") {
+                params.limit = this.totalRows;
+            }
+            params.mobile = $('#mobile').val();
+            return params;
+        },
+
+        onClickRow: function (row, $element) {
+            //console.log(row.id);
+        },
+        onDblClickRow: function (row, $element) {
+
+            $.ajax({
+                type: "get",
+                url: "/note/list",
+                data: {
+                    'recommendId': row.id
+                },
+                success: function(data){
+                    $('#recommends').empty();
+                    for (var i in data) {
+                        $('#recommends').append('<li class="list-group-item">' + data[i].createdTime
+                            + '&nbsp;&nbsp;' + data[i].content
+                            + '</li>');
+                    }
+                },
+                error:function(xhr,state,errorThrown){
+                    alert("操作失败，请稍后重新尝试！");
+                }
+            });
+            $('#recommendId').val(row.id);
+            $('#content').val('');
+            $('#myModal').modal('show');
+        },
+        columns: [ /*{
+            field: '',
+            checkbox: true, // 显示一个勾选框
+            align: 'center', // 居中显示
+        },*/{
+            field: 'id',
+            title: 'ID',
+            visible: false
+        }, {
+            field: 'name',
+            title: '姓名'
+        }, {
+            field: 'mobile',
+            title: '手机号'
+        }, {
+            field: 'area',
+            title: '意向区域'
+        }, {
+            field: 'space',
+            title: '面积'
+        }, {
+            field: 'createdTime',
+            title: '创建时间'
+        }]
+    });
+
+
+</script>
+</html>

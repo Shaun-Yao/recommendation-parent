@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>recommendation</title>
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">填写推荐信息</h3>
+    </div>
+    <div class="panel-body">
+        <form role="form" id="form" th:action="@{save}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="id" th:value="${recommendation == null ? '' : recommendation.id}"/>
+            <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">被推荐人姓名</label>
+                <input type="text" class="form-control" name="name" id="name" required="required" maxlength="6"
+                       th:value="${recommendation == null ? '' : recommendation.name}"/>
+            </div>
+            <div class="form-group">
+                <label for="mobile" class="col-sm-2 control-label">被推荐人手机号码</label>
+                <input type="tel" class="form-control" name="mobile" id="mobile"
+                       pattern="^1[3-9]\d{9}$" required="required" maxlength="11"
+                       th:value="${recommendation == null ? '' : recommendation.mobile}"/>
+            </div>
+           
+            <div class="form-group">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="mode" value="JIA_MENG"
+                               th:checked="${recommendation == null || recommendation.mode.name() == 'JIA_MENG'}" >加盟
+                    </label>
+                    <label>
+                        <input type="radio" name="mode" value="LIAN_YING"
+                               th:checked="${recommendation != null && recommendation.mode.name() eq 'LIAN_YING'}">联营
+                    </label>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="area" class="col-sm-2 control-label">意向区域</label>
+                <input type="text" class="form-control" name="area" id="area" required="required" maxlength="20"
+                       th:value="${recommendation == null ? '' : recommendation.area}"/>
+            </div>
+            <div class="form-group">
+                <label for="space" class="col-sm-2 control-label">面积</label>
+                <input type="number" class="form-control" name="space" id="space" min="5" max="500"
+                       th:value="${recommendation == null ? '' : recommendation.space}"/>
+            </div>
+            <div class="col-md-4 text-center">
+                <button type="button" class="btn btn-primary btn-lg" id="submitBtn">保存</button>
+                <button type="button" onclick="goBack()" class="btn btn-info btn-lg">取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    function goBack() {
+        $(".panel-body").modal('show');
+        window.location.href='/recommendation/list-all';
+    }
+
+    $(function(){
+        $('#submitBtn').click(function() {
+            $('#submitBtn').attr('disable', true);
+            if($('#form')[0].reportValidity()) {
+                $.ajax({
+                    type: "GET",
+                    url: "/recommendation/is-mobile-exist",
+                    data: {
+                        "mobile": $("#mobile").val()
+                    },
+                    async: false,
+                    //dataType: "json",
+                    success: function(result){
+                        if (result) {
+                            alert('手机号已被推荐！');
+                            $('#submitBtn').attr('disable', false);
+                            return;
+                        } else {
+                            $('#form').submit();
+                        }
+                    }
+                });
+            }
+        })
+    });
+</script>
+</html>
