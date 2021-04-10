@@ -124,7 +124,7 @@
             if($('#form')[0].reportValidity()) {
                 $.ajax({
                     type: "post",
-                    url: "/recommendation/add-note",
+                    url: "/note/save",
                     data: $('#form').serialize(),
                     success: function(data){
                         $('#myModal').modal('hide');

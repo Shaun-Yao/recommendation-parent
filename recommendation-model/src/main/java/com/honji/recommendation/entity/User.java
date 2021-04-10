@@ -31,6 +31,11 @@ public class User extends BaseEntity {
      */
     private String nickName;
 
+    /**
+     * 手机号
+     */
+    private String phoneNumber;
+
 //    @TableField(exist = false)
 //    private List<Participant> participants = new ArrayList<>();
 

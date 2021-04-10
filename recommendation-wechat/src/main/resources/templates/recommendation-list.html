@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 </head>
 <body>
+<form role="form" id="form"  method="post" enctype="multipart/form-data">
+    <!--  如果手机号码为空则显示  -->
+    <div class="form-group" th:if="${session.user.phoneNumber == null or session.user.phoneNumber eq ''}">
+        <label for="phoneNumber" class="col-sm-2 control-label">本人手机号码</label>
+        <input type="tel" class="col-sm-2 form-control" name="phoneNumber" id="phoneNumber"
+               pattern="^1[3-9]\d{9}$" required maxlength="11" />
+    </div>
+</form>
 <div class="panel panel-info" th:each="recommendation, state : ${recommendations}">
     <div class="panel-heading">
         <h3 class="panel-title" th:text="已推荐 + ${state.index + 1}"></h3>
@@ -37,7 +45,30 @@
         window.location.href='/user/toApply';
     }
     function toAdd() {
-        window.location.href='/recommendation/toAdd';
+        var phoneNumber = [[${session.user.phoneNumber}]];
+        console.log(phoneNumber);
+        console.log(phoneNumber == 'null');
+        // if (phoneNumber)
+        if($('#form')[0].reportValidity()) {
+            $.ajax({
+                type: "POST",
+                url: "/user/save-phone-number",
+                data: {
+                    "phoneNumber": $("#phoneNumber").val()
+                },
+                async: false,
+                success: function(result){
+                    if (result) {
+                        window.location.href='/recommendation/toAdd';
+                    } else {
+                        alert("添加手机号失败，请稍后再试！");
+                    }
+                },
+                error:function(xhr,state,errorThrown){
+                    alert("添加手机号失败，请稍后再试！");
+                }
+            });
+        }
     }
 
     function toEdit(id) {

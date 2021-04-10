@@ -16,8 +16,8 @@
     <div class="panel-body">
             <input type="hidden" name="id" id="id" th:value="${recommendation.id}"/>
             <div class="form-group">
-                <span th:text="${recommendation.name}"></span>
-                <span th:text="${recommendation.mobile}"></span>
+                <span th:text="${recommendation.getName}"></span>
+                <span th:text="${recommendation.getPhoneNumber}"></span>
             </div>
 
             <div class="form-group">
@@ -31,6 +31,9 @@
                 </ul>
             </div>
     </div>
+</div>
+<div class="col-md-4 text-center">
+    <button type="button" onclick="goBack()" class="btn btn-info btn-lg">返回</button>
 </div>
 </body>
 <script>

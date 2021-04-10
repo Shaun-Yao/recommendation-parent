@@ -26,14 +26,14 @@ public class Recommendation extends BaseEntity {
     private Long userId;
 
     /**
-     * 被推荐人姓名
+     * 被推荐客户姓名
      */
     private String name;
 
     /**
-     * 被推荐人手机号
+     * 被推荐客户手机号
      */
-    private String mobile;
+    private String phoneNumber;
 
     /**
      * 意向区域

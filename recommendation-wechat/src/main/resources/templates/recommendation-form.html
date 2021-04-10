@@ -17,15 +17,21 @@
         <form role="form" id="form" th:action="@{save}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" id="id" th:value="${recommendation == null ? '' : recommendation.id}"/>
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">被推荐人姓名</label>
-                <input type="text" class="form-control" name="name" id="name" required="required" maxlength="6"
-                       th:value="${recommendation == null ? '' : recommendation.name}"/>
+                <label for="mobile" class="col-sm-2 control-label">本人手机号码</label>
+                <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber"
+                       pattern="^1[3-9]\d{9}$" required="required" maxlength="11"
+                       th:value="${recommendation == null ? '' : recommendation.phoneNumber}"/>
             </div>
             <div class="form-group">
-                <label for="mobile" class="col-sm-2 control-label">被推荐人手机号码</label>
+                <label for="name" class="col-sm-2 control-label">被推荐客户姓名</label>
+                <input type="text" class="form-control" name="name" id="name" required="required" maxlength="6"
+                       th:value="${recommendation == null ? '' : recommendation.getName}"/>
+            </div>
+            <div class="form-group">
+                <label for="mobile" class="col-sm-2 control-label">被推荐客户手机号码</label>
                 <input type="tel" class="form-control" name="mobile" id="mobile"
                        pattern="^1[3-9]\d{9}$" required="required" maxlength="11"
-                       th:value="${recommendation == null ? '' : recommendation.mobile}"/>
+                       th:value="${recommendation == null ? '' : recommendation.getPhoneNumber}"/>
             </div>
            
             <div class="form-group">
