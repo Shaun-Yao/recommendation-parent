@@ -98,6 +98,11 @@
             <artifactId>jquery-form</artifactId>
             <version>4.2.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.bowergithub.fengyuanchen</groupId>
+            <artifactId>distpicker</artifactId>
+            <version>2.0.5</version>
+        </dependency>
     </dependencies>
 
     <build>

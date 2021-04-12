@@ -24,7 +24,7 @@
     </div>
     <div class="panel-body">
         <span th:text="${recommendation.name} + '&nbsp&nbsp&nbsp&nbsp'
-        + ${recommendation.mobile} + '&nbsp&nbsp&nbsp&nbsp' + ${recommendation.mode.getDesc()}"></span>
+        + ${recommendation.phoneNumber} + '&nbsp&nbsp&nbsp&nbsp' + ${recommendation.mode.getDesc()}"></span>
         <p></p>
         <p>
             <button type="button" class="btn btn-primary " th:onclick="'javascript:progress('+${recommendation.id}+')' ">查看进度</button>
@@ -47,28 +47,33 @@
     function toAdd() {
         var phoneNumber = [[${session.user.phoneNumber}]];
         console.log(phoneNumber);
-        console.log(phoneNumber == 'null');
-        // if (phoneNumber)
-        if($('#form')[0].reportValidity()) {
-            $.ajax({
-                type: "POST",
-                url: "/user/save-phone-number",
-                data: {
-                    "phoneNumber": $("#phoneNumber").val()
-                },
-                async: false,
-                success: function(result){
-                    if (result) {
-                        window.location.href='/recommendation/toAdd';
-                    } else {
+        console.log(phoneNumber === null);
+        console.log(phoneNumber === '');
+        if (phoneNumber === null || phoneNumber === '') {
+            if($('#form')[0].reportValidity()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/user/save-phone-number",
+                    data: {
+                        "phoneNumber": $("#phoneNumber").val()
+                    },
+                    async: false,
+                    success: function(result){
+                        if (result) {
+                            window.location.href='/recommendation/toAdd';
+                        } else {
+                            alert("添加手机号失败，请稍后再试！");
+                        }
+                    },
+                    error:function(xhr,state,errorThrown){
                         alert("添加手机号失败，请稍后再试！");
                     }
-                },
-                error:function(xhr,state,errorThrown){
-                    alert("添加手机号失败，请稍后再试！");
-                }
-            });
+                });
+            }
+        } else {
+            window.location.href='/recommendation/toAdd';
         }
+
     }
 
     function toEdit(id) {

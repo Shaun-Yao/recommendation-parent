@@ -16,13 +16,13 @@
     <div class="panel-body">
             <input type="hidden" name="id" id="id" th:value="${recommendation.id}"/>
             <div class="form-group">
-                <span th:text="${recommendation.getName}"></span>
-                <span th:text="${recommendation.getPhoneNumber}"></span>
+                <span th:text="${recommendation.name}"></span>
+                <span th:text="${recommendation.phoneNumber}"></span>
             </div>
 
             <div class="form-group">
                 <span th:text="${recommendation.mode.getDesc()}"></span>
-                <span th:text="${recommendation.area}"></span>
+                <span th:text="${recommendation.province + recommendation.city + recommendation.district}"></span>
             </div>
             <div class="form-group">
                 <ul class="list-group" th:each="note, state : ${notes}">
@@ -43,29 +43,7 @@
     }
 
     $(function(){
-        $('#submitBtn').click(function() {
-            $('#submitBtn').attr('disable', true);
-            if($('#form')[0].reportValidity()) {
-                $.ajax({
-                    type: "GET",
-                    url: "/recommendation/is-mobile-exist",
-                    data: {
-                        "mobile": $("#mobile").val()
-                    },
-                    async: false,
-                    //dataType: "json",
-                    success: function(result){
-                        if (result) {
-                            alert('手机号已被推荐！');
-                            $('#submitBtn').attr('disable', false);
-                            return;
-                        } else {
-                            $('#form').submit();
-                        }
-                    }
-                });
-            }
-        })
+
     });
 </script>
 </html>

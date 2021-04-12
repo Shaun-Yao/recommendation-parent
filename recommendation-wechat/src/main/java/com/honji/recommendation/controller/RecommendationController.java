@@ -93,14 +93,14 @@ public class RecommendationController {
 
     /**
      * 判断手机号是否已经存在
-     * @param mobile
+     * @param phoneNumber
      * @return
      */
     @ResponseBody
-    @GetMapping("/is-mobile-exist")
-    public boolean isMobileExist(@RequestParam String mobile) {
+    @GetMapping("/is-phone-exist")
+    public boolean isMobileExist(@RequestParam String phoneNumber) {
         QueryWrapper<Recommendation> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("mobile", mobile);
+        queryWrapper.eq("phone_number", phoneNumber);
         Recommendation recommendation = recommendationService.getOne(queryWrapper);
         if (recommendation != null) {//手机号已经存在
             return true;

@@ -44,14 +44,9 @@ public class RecommendationController {
     @ResponseBody
     @GetMapping("/list")
     public DataGridResult list(@RequestParam(defaultValue = "0") int offset, @RequestParam int limit,
-             @RequestParam(required = false) String mobile) {
-        IPage<Recommendation> recommendationPage = new Page<>(offset / limit + 1, limit);
-        QueryWrapper<Recommendation> queryWrapper = new QueryWrapper<>();
-        if (!StringUtils.isEmpty(mobile)) {
-            queryWrapper.like("mobile", mobile);
-        }
+             @RequestParam(required = false) String phoneNumber) {
 
-        return new DataGridResult(recommendationService.page(recommendationPage, queryWrapper));
+        return new DataGridResult(recommendationService.listForIndex(offset, limit, phoneNumber));
     }
 
 }

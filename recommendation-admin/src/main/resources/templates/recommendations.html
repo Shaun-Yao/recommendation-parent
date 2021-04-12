@@ -18,9 +18,9 @@
     <form class="form-inline" id="resource-form">
 
         <div class="form-group">
-            <label class="form-lable">手机号码：</label>
+            <label class="form-lable">客户手机号码：</label>
             <div class='input-group date' id='month-date'>
-                <input type='number' class="form-control" name="mobile" id='mobile' maxlength="11" required />
+                <input type='tel' class="form-control" name="phoneNumber" id='phoneNumber' maxlength="11" required />
 
             </div>
         </div>
@@ -48,7 +48,11 @@
             </div>
             <form class="form-horizontal" id="form" role="form" method="post">
                 <div class="modal-body">
-
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <label class="col-sm-10 control-label" id="main"></label>
+                        </div>
+                    </div>
                     <ul class="list-group" id="recommends">
 
                     </ul>
@@ -161,7 +165,7 @@
             if (typeof(params.limit) == "undefined") {
                 params.limit = this.totalRows;
             }
-            params.mobile = $('#mobile').val();
+            params.phoneNumber = $('#phoneNumber').val();
             return params;
         },
 
@@ -169,7 +173,7 @@
             //console.log(row.id);
         },
         onDblClickRow: function (row, $element) {
-
+            $('#main').text('客户：' + row.name + ' ' + row.customerPhoneNumber);
             $.ajax({
                 type: "get",
                 url: "/note/list",
@@ -201,14 +205,23 @@
             title: 'ID',
             visible: false
         }, {
+            field: 'phoneNumber',
+            title: '推荐人手机号'
+        }, {
             field: 'name',
-            title: '姓名'
+            title: '客户姓名'
         }, {
-            field: 'mobile',
-            title: '手机号'
+            field: 'customerPhoneNumber',
+            title: '客户手机号'
         }, {
-            field: 'area',
-            title: '意向区域'
+            field: 'province',
+            title: '省份'
+        }, {
+            field: 'city',
+            title: '城市'
+        }, {
+            field: 'district',
+            title: '区'
         }, {
             field: 'space',
             title: '面积'

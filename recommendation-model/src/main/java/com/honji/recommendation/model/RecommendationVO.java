@@ -1,29 +1,26 @@
-package com.honji.recommendation.entity;
+package com.honji.recommendation.model;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.honji.recommendation.entity.BaseEntity;
 import com.honji.recommendation.enums.ModeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author yao
- * @since 2021-04-03
- */
+
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-public class Recommendation extends BaseEntity {
+public class RecommendationVO {
 
+    private Long id;
 
     /**
-     * userId
+     * 推荐人手机号
      */
-    private Long userId;
+    private String phoneNumber;
 
     /**
      * 被推荐客户姓名
@@ -33,7 +30,7 @@ public class Recommendation extends BaseEntity {
     /**
      * 被推荐客户手机号
      */
-    private String phoneNumber;
+    private String customerPhoneNumber;
 
     /**
      * 省份
@@ -60,6 +57,7 @@ public class Recommendation extends BaseEntity {
      */
     private Integer space;
 
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    protected LocalDateTime createdTime;
 
 }
