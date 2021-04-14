@@ -60,6 +60,9 @@ public class Recommendation extends BaseEntity {
      */
     private Integer space;
 
-
+    /**
+     * 备注
+     */
+    private String comment;
 
 }

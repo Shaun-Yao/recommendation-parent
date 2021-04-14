@@ -57,7 +57,12 @@ public class RecommendationVO {
      */
     private Integer space;
 
+    /**
+     * 备注
+     */
+    private String comment;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected LocalDateTime createdTime;
+    private LocalDateTime createdTime;
 
 }
