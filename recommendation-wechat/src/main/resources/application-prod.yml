@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://10.10.10.107:3306/recommendation?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
+    url: jdbc:mysql://10.10.10.107:3306/romantic_spring?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
     username: ipos
     password: hongjipos@2016
     driver-class-name: com.mysql.jdbc.Driver
@@ -31,8 +31,8 @@ mybatis-plus:
 
 wx:
   mp:
-    appId:
-    secret:
+    appId: wx5c381fc8c2e03d79
+    secret: 4829f8cf6a078933d1c62395afd49611
 
 logging:
   file: logs/recommendation-wechat.log
