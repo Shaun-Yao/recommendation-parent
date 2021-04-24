@@ -8,6 +8,7 @@
         <module>recommendation-mapper</module>
         <module>recommendation-service</module>
         <module>recommendation-wechat</module>
+        <module>report-web</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -25,26 +26,7 @@
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
-        <!--<dependency>
-            <groupId>com.honji</groupId>
-            <artifactId>recommendation-model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.honji</groupId>
-            <artifactId>recommendation-mapper</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.honji</groupId>
-            <artifactId>recommendation-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.honji</groupId>
-            <artifactId>recommendation-admin</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
