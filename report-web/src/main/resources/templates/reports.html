@@ -44,33 +44,27 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">填写汇报</h4>
             </div>
-            <form class="form-horizontal" id="form" role="form" method="post">
+            <form id="form" role="form" method="post">
                 <div class="modal-body">
-
                     <input type="hidden" id="id" name="id">
                     <input type="hidden" id="jobNumber" name="jobNumber" th:value="${jobNumber}">
                     <div class="form-group">
-                        <label for="date" class="col-sm-2 control-label">日期</label>
-                        <div class="col-sm-10 date" >
-                            <input type="text" id="date" name="date" required></input>
-                        </div>
+                        <label for="date" >日期</label>
+                        <input type="text" class="form-control" id="date" name="date" required></input>
                     </div>
                     <div class="form-group">
-                        <label for="content" class="col-sm-2 control-label">内容</label>
-                        <div class="col-sm-10">
-                            <textarea id="content" name="content" required></textarea>
-                        </div>
+                        <label for="content">计划内容</label>
+                        <textarea class="form-control" id="content" name="content" rows="8" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="comment" class="col-sm-2 control-label">备注</label>
-                        <div class="col-sm-10">
-                            <textarea id="comment" name="comment" required></textarea>
-                        </div>
+                        <label for="comment" >备注(如计划不变，此处无需填写)</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="5"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     <button type="button" id="save" class="btn btn-primary">保存</button>
+                    <button type="button" id="next" class="btn btn-info">保存&下一天</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
                 </div>
             </form>
         </div><!-- /.modal-content -->
@@ -84,7 +78,6 @@
 <script src="/webjars/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
 <script src="/webjars/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
 <script src="/webjars/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js"></script>
-<script src="/webjars/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="/webjars/momentjs/2.24.0/min/moment-with-locales.min.js"></script>
 <script src="/webjars/Eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/webjars/bootbox.js/5.1.3/dist/bootbox.min.js"></script>
@@ -109,9 +102,8 @@
             showTodayButton: true,
             showClear: true,
             showClose: true,
-            daysOfWeekDisabled: [0, 6],
             minDate : moment().add('d', -2).toDate(),
-            maxDate : moment().add('d', 10).toDate() //最大日期为7天后
+            maxDate : moment().add('d', 8).toDate() //最大日期为7天后
         });
 
         $('#searchBtn').click(function () {
@@ -125,15 +117,14 @@
         });
 
         $('#add').click(function () {
-            $('#id').val('');
-            $('#form').resetForm();//无法重置hidden项
-            // $("input:radio").get(0).checked=true;
-            // $("input[type='radio']").each(function (index, element) {
-            //     $(this).get(0).checked=true;
-            // });
-            // $("input:radio[name=type]").get(0).checked=true;
-            // $("input:radio[name=situation]").get(0).checked=true;
-            // $("input:radio[name=mode]").get(0).checked=true;
+            var id = $('#id').val();
+            console.log("===" + id);
+            // if (id==''||id==undefined||id==null) {
+            if (id.length > 0) {
+                $('#id').val('');
+                $('#form').resetForm();//无法重置hidden项
+            }
+
             $('#myModal').modal('show');
         });
 
@@ -171,11 +162,34 @@
                         $('#table').bootstrapTable('refresh');
                     },
                     error:function(xhr,state,errorThrown){
-                        alert("操作失败，请稍后重新尝试！");
+                        alert("保存失败，请确认日期是否已经填写！");
                     }
                 });
             }
         });
+
+        $('#next').click(function() {
+
+            if($('#form')[0].reportValidity()) {
+                $.ajax({
+                    type: "post",
+                    url: "/report/save",
+                    data: $('#form').serialize(),
+                    success: function(data){
+                        $('#id').val('');
+                        $('#content').val('');
+                        $('#comment').val('');
+                        var nextday = $('#date').data("DateTimePicker").date().add('d', 1).toDate();
+                        $('#date').data("DateTimePicker").options({date: nextday});
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error:function(xhr,state,errorThrown){
+                        alert("保存失败，请确认日期是否已经填写！");
+                    }
+                });
+            }
+        });
+
 
     });
 
