@@ -19,6 +19,18 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Recommendation extends BaseEntity {
 
+    public Recommendation(Long userId, String name, String phoneNumber, String province,
+                          String city, String district, ModeEnum mode, Integer space, String comment) {
+        this.userId = userId;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.province = province;
+        this.city = city;
+        this.district = district;
+        this.mode = mode;
+        this.space = space;
+        this.comment = comment;
+    }
 
     /**
      * userId
@@ -64,5 +76,6 @@ public class Recommendation extends BaseEntity {
      * 备注
      */
     private String comment;
+
 
 }

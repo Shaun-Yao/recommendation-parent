@@ -2,12 +2,10 @@ package com.honji.recommendation.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.honji.recommendation.dto.RecommendationDTO;
 import com.honji.recommendation.entity.Note;
 import com.honji.recommendation.entity.Recommendation;
 import com.honji.recommendation.entity.User;
-import com.honji.recommendation.model.DataGridResult;
 import com.honji.recommendation.service.INoteService;
 import com.honji.recommendation.service.IRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +87,26 @@ public class RecommendationController {
         recommendation.setUserId(user.getId());
         recommendationService.saveOrUpdate(recommendation);
         return "redirect:/recommendation/list-all";
+    }
+
+    @ResponseBody
+    @PostMapping("/save2")
+    public boolean save(@ModelAttribute RecommendationDTO dto) {
+//        User user = (User) session.getAttribute("user");
+//        recommendation.setUserId(user.getId());
+
+//        List<String> region = dto.getRegion();
+        String[] region = dto.getRegion();
+//        Recommendation recommendation = new Recommendation(dto.getUserId(), dto.getName(), dto.getPhoneNumber(),
+//                region.get(0), region.get(1), region.get(2), dto.getMode(), dto.getSpace(), dto.getComment());
+        Recommendation recommendation = new Recommendation(dto.getUserId(), dto.getName(), dto.getPhoneNumber(),
+                region[0], region[1], region[2], dto.getMode(), dto.getSpace(), dto.getComment());
+//        Boolean success = recommendationService.saveOrUpdate(recommendation);
+//        System.out.println("success====" + success);
+//        Map<String, Boolean> result = new HashMap<>();
+//        result.put("success", success);
+//        return result;
+        return recommendationService.saveOrUpdate(recommendation);
     }
 
     /**

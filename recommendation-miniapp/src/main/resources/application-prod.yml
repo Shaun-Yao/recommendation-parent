@@ -1,8 +1,5 @@
 server:
-  port: 8003
-  servlet:
-    session:
-      timeout: 4h
+  port: 80
 
 
 spring:
@@ -32,11 +29,13 @@ mybatis-plus:
     configuration:
       default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
 
-
+wx:
+  mp:
+    appId: wx5c381fc8c2e03d79
+    secret: 4829f8cf6a078933d1c62395afd49611
 
 logging:
-
-  file: logs/report-web.log
+  file: logs/recommendation-wechat.log
   level:
-    com.honji.recommendation.mapper: INFO
+    com.honji.recommendation.mapper: debug
     root: INFO

@@ -117,8 +117,8 @@
         });
 
         $('#add').click(function () {
+            $('#next').show();
             var id = $('#id').val();
-            console.log("===" + id);
             // if (id==''||id==undefined||id==null) {
             if (id.length > 0) {
                 $('#id').val('');
@@ -179,7 +179,9 @@
                         $('#id').val('');
                         $('#content').val('');
                         $('#comment').val('');
-                        var nextday = $('#date').data("DateTimePicker").date().add('d', 1).toDate();
+                        // console.log($('#date').val().add('d', 1).toDate());
+                        // var nextday = $('#date').data("DateTimePicker").date().add('d', 1).toDate();
+                        var nextday = moment($('#date').val().split(' ')[0]).add('d', 1).toDate();
                         $('#date').data("DateTimePicker").options({date: nextday});
                         $('#table').bootstrapTable('refresh');
                     },
@@ -189,8 +191,6 @@
                 });
             }
         });
-
-
     });
 
 
@@ -220,7 +220,7 @@
             //console.log(row.id);
         },
         onDblClickRow: function (row, $element) {
-            $('#main').text('客户：' + row.name + ' ' + row.customerPhoneNumber);
+            // $('#main').text('客户：' + row.name + ' ' + row.customerPhoneNumber);
             $.ajax({
                 type: "get",
                 url: "/report/get",
@@ -228,6 +228,7 @@
                     'id': row.id
                 },
                 success: function(data){
+                    $('#next').hide();
                     $('#id').val(data.id);
                     $('#date').val(data.date);
                     $('#content').val(data.content);
